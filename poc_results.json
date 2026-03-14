@@ -1,0 +1,29 @@
+[
+  {
+    "employee_id": "3347269991af564abc11ec0a8183a3bdfc6a3facfe132ac002185a07b64cc997",
+    "risk_score": 0.62,
+    "factors": {
+      "historical_attendance": 0.602,
+      "weather": 0.015,
+      "traffic": 0.033
+    }
+  },
+  {
+    "employee_id": "06d00caa75bf41824077a63784b9f55da1b2c06138125daf731a49c7843f0f7c",
+    "risk_score": 0.12,
+    "factors": {
+      "historical_attendance": 0.119,
+      "weather": 0.015,
+      "traffic": 0.0045
+    }
+  },
+  {
+    "employee_id": "a2d66c870c79ab12322179b8014e69232d56fe82e1322088eb0687ef1f09cde0",
+    "risk_score": 0.23,
+    "factors": {
+      "historical_attendance": 0.098,
+      "weather": 0.015,
+      "traffic": 0.1035
+    }
+  }
+]
