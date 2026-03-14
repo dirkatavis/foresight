@@ -22,7 +22,7 @@ This document outlines the manager dashboard design and cross-agent integrations
 
 ### Main Dashboard (Clean, Modern Layout)
 - **Header**: MUI AppBar with facility selector (RBAC-scoped), date picker, and export button.
-- **Heatmap Grid**: MUI DataGrid with color-coded cells (green/yellow/red for risk scores). Hover for tooltips showing factors.
+- **Heatmap Grid**: MUI DataGrid with color-coded cells (green/yellow/red for risk scores). Hover for tooltips showing factors. Data fetched from /api/dashboard/heatmap for trends.
 - **Sidebar**: Filters for shift windows, risk thresholds. Collapsible for mobile.
 - **Footer**: Audit log summary (e.g., "Last updated: 5 min ago").
 

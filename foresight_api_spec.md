@@ -53,11 +53,20 @@ This document specifies the API endpoints and backend services for ForeSight Att
 - **Response**: Success status.
 - **Security**: Data encrypted before storage.
 
-### 4. GET /api/dashboard/summary
-- **Purpose**: Aggregated risk heatmap for managers.
+### 4. GET /api/dashboard/heatmap
+- **Purpose**: Aggregated data for manager heatmap visualization (trends over time/facility).
 - **RBAC**: Manager role, facility-scoped.
-- **Response**: Heatmap data (e.g., {"high_risk_count": 5}).
-- **Security**: Aggregated only; no individual details.
+- **Query Params**: facility_id, date_range (e.g., "2026-03-10 to 2026-03-17").
+- **Response**:
+  ```json
+  {
+    "heatmap_data": [
+      {"date": "2026-03-17", "shift": "09:00-17:00", "high_risk_count": 3, "total_employees": 10},
+      ...
+    ]
+  }
+  ```
+- **Security**: Aggregated only; no individual scores.
 
 ---
 
