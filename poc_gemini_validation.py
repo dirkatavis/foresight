@@ -3,19 +3,25 @@ import hashlib
 import random
 import json
 import sys
+import os
+from datetime import datetime, timedelta
 
 # Load or generate synthetic data with schedules
-try:
+import os
+if os.path.exists('synthetic_data.csv') and os.path.exists('synthetic_attendance.csv'):
     df = pd.read_csv('synthetic_data.csv')
-except FileNotFoundError:
-    # Generate if not exists
-    data = []
-    for i in range(1000):
+    df_att = pd.read_csv('synthetic_attendance.csv')
+else:
+    print("Generating synthetic dataset (100 employees, 10-1000 shifts each)...")
+    employees = []
+    attendance_records = []
+    roles = ['indoor', 'outdoor', 'mixed']
+    tenure_phases = ['new_hire', 'standard', 'veteran']
+
+    for i in range(100):
         employee_id = f"emp_{i}"
         hashed_id = hashlib.sha256(employee_id.encode()).hexdigest()
-        historical_absence_rate = round(random.uniform(0, 1), 2)
-        historical_late_rate = round(random.uniform(0, 1), 2)
-        # Weekly schedule: e.g., {"monday": "09:00-17:00", "tuesday": "10:00-18:00", ...}
+        
         schedule = {
             "monday": "09:00-17:00",
             "tuesday": "09:00-17:00",
@@ -25,14 +31,70 @@ except FileNotFoundError:
             "saturday": None,
             "sunday": None
         }
-        data.append({
+        
+        # Generate between 10 and 1000 shift records
+        num_shifts = random.randint(10, 1000)
+        current_date = datetime(2026, 3, 17) - timedelta(days=num_shifts)
+        
+        late_count = 0
+        absent_count = 0
+        total_latency = 0
+        
+        for _ in range(num_shifts):
+            # Skip weekends for standard schedule alignment
+            while current_date.weekday() >= 5:
+                current_date += timedelta(days=1)
+                
+            status_choice = random.choices(['present', 'late', 'absent'], weights=[0.8, 0.15, 0.05])[0]
+            scheduled_in = current_date.replace(hour=9, minute=0)
+            scheduled_out = current_date.replace(hour=17, minute=0)
+            
+            if status_choice == 'present':
+                actual_in = scheduled_in - timedelta(minutes=random.randint(0, 15))
+                actual_out = scheduled_out + timedelta(minutes=random.randint(0, 30))
+                latency = 0
+            elif status_choice == 'late':
+                actual_in = scheduled_in + timedelta(minutes=random.randint(1, 60))
+                actual_out = scheduled_out + timedelta(minutes=random.randint(0, 30))
+                late_count += 1
+                latency = (actual_in - scheduled_in).total_seconds() / 60
+            else:
+                actual_in = None
+                actual_out = None
+                absent_count += 1
+                latency = 0
+                
+            total_latency += latency
+            
+            attendance_records.append({
+                'employee_id': hashed_id,
+                'date': current_date.strftime('%Y-%m-%d'),
+                'scheduled_in': scheduled_in.strftime('%H:%M:%S'),
+                'scheduled_out': scheduled_out.strftime('%H:%M:%S'),
+                'actual_in': actual_in.strftime('%H:%M:%S') if actual_in else None,
+                'actual_out': actual_out.strftime('%H:%M:%S') if actual_out else None,
+                'status': status_choice
+            })
+            
+            current_date += timedelta(days=1)
+            
+        employees.append({
             'employee_id': hashed_id,
-            'historical_absence_rate': historical_absence_rate,
-            'historical_late_rate': historical_late_rate,
+            'historical_absence_rate': round(absent_count / num_shifts, 2),
+            'historical_late_rate': round(late_count / num_shifts, 2),
+            'punch_latency_trend': round(total_latency / max(1, late_count), 1) if late_count > 0 else 0.0,
+            'absentee_momentum': min(30, absent_count),
+            'role_exposure': random.choice(roles),
+            'tenure_phase': random.choice(tenure_phases),
             'weekly_schedule': json.dumps(schedule)
         })
-    df = pd.DataFrame(data)
+        
+    df = pd.DataFrame(employees)
     df.to_csv('synthetic_data.csv', index=False)
+    
+    df_att = pd.DataFrame(attendance_records)
+    df_att.to_csv('synthetic_attendance.csv', index=False)
+    print(f"Generated {len(df)} employees and {len(df_att)} shift records.")
 
 # Mock API calls
 def mock_weather_api(date, time):

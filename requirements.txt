@@ -1,0 +1,20 @@
+# ForeSight Attendance — Python Dependencies
+# Phase 3 (Beta / MVP)
+
+# Core
+pandas>=2.0
+pydantic>=2.0
+
+# API Server
+fastapi>=0.100
+uvicorn>=0.20
+
+# AI / Gemini (Layer 2 — Reasoning Engine)
+google-genai>=1.0
+
+# Utilities
+requests>=2.28
+
+# Security & Linting (dev)
+bandit>=1.7
+pylint>=3.0

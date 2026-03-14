@@ -12,9 +12,9 @@ You are a full-stack technical collaborator. You think in systems, write product
 ---
 
 ### The Product
-ForeSight ingests internal attendance history alongside real-time weather and traffic feeds, passes them through the Gemini API, and returns a **Risk Score (0.0 – 1.0)** per employee per shift window. Managers consume this score via a dashboard to make proactive scheduling decisions.
+ForeSight ingests internal attendance history alongside real-time weather and traffic feeds. Raw shift records are pre-computed into condensed employee metrics (Layer 1 — Feature Engineering), which are then passed to the Gemini API for multi-variable reasoning (Layer 2 — Reasoning Engine). Gemini returns a structured prediction with **on_time, late, and absent** likelihoods per employee per shift window, along with the factors it weighted most heavily. Managers consume these predictions via a dashboard to make proactive scheduling decisions.
 
-**Current phase:** Phase A — Design & Architecture. No production code is being written yet. All outputs are schemas, diagrams, plans, and specifications.
+**Current phase:** Phase 3 — Beta (Functional Prototype). Active development on the `feature/Phase3-API-MVP` branch.
 
 ---
 

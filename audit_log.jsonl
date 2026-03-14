@@ -1,0 +1,2 @@
+{"timestamp": "2026-03-14T21:23:31.002679Z", "manager_id": "mgr_001", "facility_id": "facility_a", "action": "prediction_generated", "details": {"employee_count": 1, "shift_date": "2026-03-17"}}
+{"timestamp": "2026-03-14T21:23:35.112073Z", "manager_id": "admin_001", "facility_id": "*", "action": "prediction_generated", "details": {"employee_count": 1, "shift_date": "2026-03-17"}}
